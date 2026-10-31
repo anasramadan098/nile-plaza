@@ -48,15 +48,6 @@ em { color: var(--muted-gold); font-style: italic; }
 .footer-top .gold-button { margin: 0; }
 .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 25px; color: #888d8c; font-size: 8px; letter-spacing: .14em; }
 .footer-bottom div { display: flex; gap: 22px; color: var(--muted-gold); }
-<<<<<<< HEAD
-=======
-.preloader { position: fixed; z-index: 100; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 48px clamp(24px, 6vw, 90px); background: #0b1015; pointer-events: none; }
-.preloader-mark { color: var(--gold); font-family: Georgia, serif; font-size: 28px; letter-spacing: .1em; }
-.preloader-mark span { display: block; margin-top: 7px; color: var(--muted-gold); font-family: Arial, sans-serif; font-size: 8px; letter-spacing: .3em; }
-.preloader-bottom { display: grid; grid-template-columns: 1fr auto; gap: 13px; color: #a6a69e; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
-.progress-track { grid-column: 1 / -1; height: 1px; background: rgba(212,175,55,.25); }
-.progress-fill { height: 100%; background: var(--gold); transition: width .18s linear; }
->>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
 @media (max-width: 1024px) {
 	.site-header { padding-inline: 34px; }
 	.site-header nav { gap: 22px; font-size: 9px; }
@@ -98,7 +89,3 @@ em { color: var(--muted-gold); font-style: italic; }
 	.scene-description { font-size: 11px; }
 	.footer-bottom { font-size: 7px; }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
