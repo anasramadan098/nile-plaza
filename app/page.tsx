@@ -22,11 +22,16 @@ function framePath(index: number) {
 export default function Home() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const sequenceRef = useRef<HTMLElement>(null);
+<<<<<<< HEAD
     const imagesRef = useRef<HTMLImageElement[]>([]);
+=======
+    const [loaded, setLoaded] = useState(0);
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
     const [activeScene, setActiveScene] = useState(0);
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
+<<<<<<< HEAD
       const images = Array.from({ length: FRAME_COUNT }, () => new Image());
       imagesRef.current = images;
       let cancelled = false;
@@ -37,6 +42,24 @@ export default function Home() {
           image.onerror = () => { if (!cancelled) setIsReady(true); };
         }
         image.src = framePath(index);
+=======
+      const images: HTMLImageElement[] = [];
+      let cancelled = false;
+      let completed = 0;
+      const updateProgress = () => {
+        completed += 1;
+        if (!cancelled) {
+          setLoaded(completed);
+          if (completed === FRAME_COUNT) setIsReady(true);
+        }
+      };
+      for (let index = 0; index < FRAME_COUNT; index += 1) {
+        const image = new Image();
+        image.src = framePath(index);
+        image.onload = updateProgress;
+        image.onerror = updateProgress;
+        images.push(image);
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
       }
       return () => { cancelled = true; images.forEach((image) => { image.onload = null; image.onerror = null; }); };
     }, []);
@@ -47,6 +70,7 @@ export default function Home() {
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
       if (!context) return;
+<<<<<<< HEAD
       const drawingContext = context;
       const images = imagesRef.current;
       const frameState = { frame: 0 };
@@ -68,12 +92,25 @@ export default function Home() {
           return;
         }
         if (frame === lastFrame) return;
+=======
+      const images = Array.from({ length: FRAME_COUNT }, (_, index) => { const image = new Image(); image.src = framePath(index); return image; });
+      const frameState = { frame: 0 };
+      let lastFrame = -1;
+      const drawFrame = (frame: number) => {
+        const image = images[frame];
+        if (!image?.complete || !image.naturalWidth || frame === lastFrame) return;
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
         lastFrame = frame;
         const scale = Math.max(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
         const width = image.naturalWidth * scale;
         const height = image.naturalHeight * scale;
+<<<<<<< HEAD
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
         drawingContext.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+=======
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, (canvas.width - width) / 2, (canvas.height - height) / 2, width, height);
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
       };
       const resizeCanvas = () => {
         const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -84,21 +121,35 @@ export default function Home() {
       const handleFrame = () => {
         const frame = Math.round(frameState.frame);
         drawFrame(frame);
+<<<<<<< HEAD
         for (let index = frame + 1; index < Math.min(frame + 9, FRAME_COUNT); index += 1) loadFrame(index);
+=======
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
         const nextScene = scenes.findIndex(([start, end]) => frame >= start && frame <= end);
         if (nextScene !== -1) setActiveScene(nextScene);
       };
       const contextScope = gsap.context(() => {
         resizeCanvas();
         window.addEventListener("resize", resizeCanvas);
+<<<<<<< HEAD
         drawFrame(0);
+=======
+        images[0].decode?.().catch(() => undefined).finally(() => drawFrame(0));
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
         gsap.to(frameState, { frame: FRAME_COUNT - 1, ease: "none", snap: "frame", onUpdate: handleFrame, scrollTrigger: { trigger: sequenceRef.current, start: "top top", end: "bottom bottom", scrub: 0.5, pin: ".sequence-stage", anticipatePin: 1 } });
       }, sequenceRef);
       return () => { window.removeEventListener("resize", resizeCanvas); contextScope.revert(); };
     }, [isReady]);
 
+<<<<<<< HEAD
     return (
       <main className="site-shell">
+=======
+    const progress = Math.round((loaded / FRAME_COUNT) * 100);
+    return (
+      <main className="site-shell">
+        {!isReady && <div className="preloader" aria-live="polite"><div className="preloader-mark">FS<span>NILE PLAZA</span></div><div className="preloader-bottom"><span>Preparing your arrival</span><span>{progress}%</span><div className="progress-track"><div className="progress-fill" style={{ width: `${progress}%` }} /></div></div></div>}
+>>>>>>> c67d80fd3d0b799c75c2efb229e0fc5b647bc5f3
         <header className="site-header"><a className="brand" href="#top" aria-label="Four Seasons Nile Plaza home"><img className="brand-logo" src="/logo.png" alt="Four Seasons Hotels and Resorts" /><span>HOTEL CAIRO AT NILE PLAZA</span></a><nav><a href="#experience">The experience</a><a href="#stay">Stay with us</a><a href="#contact">Contact</a></nav><a className="header-cta" href="#contact">Reserve <span>↗</span></a></header>
         <section id="experience" ref={sequenceRef} className="sequence" aria-label="Four Seasons Nile Plaza experience"><div className="sequence-stage"><canvas ref={canvasRef} aria-label="Cinematic view of Four Seasons Nile Plaza" /><div className="canvas-overlay" /><div className="scene-progress"><span>SCROLL TO EXPLORE</span><i /><span>CAIRO / 30.04° N</span></div>{scenes.map(([number, , , eyebrow, title, description], index) => <div className={`scene ${activeScene === index ? "scene-active" : ""}`} key={number}><p className="scene-eyebrow"><span>{number}</span>{eyebrow}</p><h1>{title.split("\n").map((line) => <span key={line}>{line}</span>)}</h1><p className="scene-description">{description}</p>{index === 0 && <span className="scroll-cue">↓ &nbsp; Begin the journey</span>}{index === scenes.length - 1 && <a className="gold-button" href="#contact">Reserve your stay <span>↗</span></a>}</div>)}</div></section>
         <section id="stay" className="booking-section"><div className="section-kicker">THE NILE, YOUR WAY</div><div className="booking-grid"><div><h2>Arrive somewhere<br /><em>extraordinary.</em></h2><p className="section-lede">A stay shaped around the river, the city, and the art of making every moment feel entirely yours.</p></div><div className="booking-panel"><div className="panel-top"><span>PLAN YOUR STAY</span><span className="panel-line" /></div><a href="#contact" className="booking-row"><span>01</span><span>Check availability</span><span>↗</span></a><a href="#contact" className="booking-row"><span>02</span><span>Explore our rooms & suites</span><span>↗</span></a><a href="#contact" className="booking-row"><span>03</span><span>Meet your concierge</span><span>↗</span></a></div></div></section>
